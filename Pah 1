@@ -1,0 +1,117 @@
+PAH -- 1
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #mark-progress {
+            background-color: rgb(41, 168, 71);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #reset-progress {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .checkbox-container {
+            margin: 20px 0;
+        }
+        .checkbox-container input {
+            margin-right: 10px;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+        #habit-input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+        #add-habit {
+            padding: 8px 16px;
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Habit Tracker</h1>
+    <p id="summary">You have completed 0 habits today.</p>
+    <div class="form-container">
+        <input type="text" id="habit-input" placeholder="Enter a new habit">
+        <button id="add-habit">Add Habit</button>
+    </div>
+    <div class="checkbox-container" id="checkbox-container">
+        <input type="checkbox" id="chkWater"> Drink Water<br>
+        <input type="checkbox" id="chkExercise"> Exercise<br>
+        <input type="checkbox" id="chkReading"> Reading<br>
+    </div>
+    <button id="mark-progress">Mark Progress</button>
+    <button id="reset-progress">Reset</button>
+
+    <script>
+        const markProgressButton = document.getElementById('mark-progress');
+        const resetButton = document.getElementById('reset-progress');
+        const addHabitButton = document.getElementById('add-habit');
+        const habitInput = document.getElementById('habit-input');
+        const summary = document.getElementById('summary');
+        const checkboxContainer = document.getElementById('checkbox-container');
+
+        // Function to get all checkboxes
+        const getCheckboxes = () => document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+
+        // Add new habit
+        addHabitButton.addEventListener('click', () => {
+            const habitText = habitInput.value.trim();
+            if (habitText) {
+                const habitId = `chk${habitText.replace(/\s+/g, '')}_${Date.now()}`; // Unique ID
+                const div = document.createElement('div');
+                div.innerHTML = `<input type="checkbox" id="${habitId}"> ${habitText}<br>`;
+                checkboxContainer.appendChild(div);
+                habitInput.value = ''; // Clear input
+            }
+        });
+
+        // Mark progress
+        markProgressButton.addEventListener('click', () => {
+            const checkboxes = getCheckboxes();
+            let completedHabits = 0;
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    completedHabits++;
+                }
+            });
+            summary.textContent = `You have completed ${completedHabits} habits today.`;
+        });
+
+        // Reset progress
+        resetButton.addEventListener('click', () => {
+            const checkboxes = getCheckboxes();
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            summary.textContent = 'You have completed 0 habits today.';
+        });
+    </script>
+</body>
+</html>
