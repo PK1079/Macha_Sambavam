@@ -1,0 +1,89 @@
+fix the code (style.css)
+
+#addAlbumBtn {
+    background-color: rgb(76, 175, 80);
+}
+
+fix the code (script.js)
+
+document.getElementById('addAlbumBtn').addEventListener('click', function() {
+    const albumName = document.getElementById('albumName').value.trim();
+    const releaseYear = document.getElementById('releaseYear').value.trim();
+    const genre = document.getElementById('genre').value;
+    const favorite = document.getElementById('favorite').checked;
+    const errorMessage = document.getElementById('error-message');
+
+    if (!albumName || !releaseYear || !genre) {
+        errorMessage.textContent = 'Please fill out all fields!';
+        return;
+    }
+
+    errorMessage.textContent = '';
+
+    const albumItem = document.createElement('li');
+    albumItem.textContent = ${albumName} (${releaseYear}) - ${genre};
+
+    if (favorite) {
+        document.getElementById('favoriteAlbumList').appendChild(albumItem);
+    } else {
+        document.getElementById('albumList').appendChild(albumItem);
+    }
+
+    document.getElementById('albumName').value = '';
+    document.getElementById('releaseYear').value = '';
+    document.getElementById('genre').value = '';
+    document.getElementById('favorite').checked = false;
+});
+
+fix the code
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Album Collection Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Music Albums Manager</h1>
+    </header>
+
+    <h3>Music Album Collection</h3>
+
+    <form>
+        <label for="albumName">Album Name:</label>
+        <input id="albumName" type="text" required placeholder="Enter album name">
+        <br><br>
+       
+        <label for="releaseYear">Release Year:</label>
+        <input id="releaseYear" type="number" required placeholder="Enter release year">
+        <br><br>
+       
+        <label for="genre">Genre:</label>
+        <select id="genre">
+            <option value="Pop">Pop</option>
+            <option value="Rock">Rock</option>
+            <option value="Jazz">Jazz</option>
+            <option value="Classical">Classical</option>
+        </select>
+        <br><br>
+       
+        <label for="favorite">Mark as Favorite:</label>
+        <input type="checkbox" id="favorite">
+        <br><br>
+       
+        <button id="addAlbumBtn" type="button">Add Album</button>
+        <span id="error-message"></span>
+    </form>
+
+    <h2>Album List</h2>
+    <ul id="albumList"></ul>
+   
+    <h2>Favorites Album</h2>
+    <ul id="favoriteAlbumList"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
