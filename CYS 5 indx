@@ -9,6 +9,7 @@
   <style>
     #sketchPad {
       border: 2px solid #000;
+      background-color: #ffffff; /* ensure canvas starts white */
     }
     #currentColorDisplay {
       margin-top: 10px;
@@ -27,7 +28,6 @@
     <div class="my-3">
       <button id="redBtn" class="btn btn-danger">Red</button>
       <button id="blueBtn" class="btn btn-primary">Blue</button>
-      <button id="greenBtn" class="btn btn-success">Green</button>
       <button id="eraserBtn" class="btn btn-secondary">Eraser</button>
     </div>
 
@@ -40,6 +40,76 @@
     <div id="currentColorDisplay">Current Color: <span id="currentColor">Black</span></div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const canvas = document.getElementById("sketchPad");
+    const ctx = canvas.getContext("2d");
+
+    // Fill canvas with white background initially
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Default stroke style = black
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 2;
+
+    let drawing = false;
+
+    function startDraw(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height) {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      }
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height) {
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+    }
+
+    function stopDraw() {
+      drawing = false;
+    }
+
+    // Event listeners
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stopDraw);
+    canvas.addEventListener("mouseleave", stopDraw);
+
+    // Button handlers
+    const currentColorText = document.getElementById("currentColor");
+
+    document.getElementById("redBtn").addEventListener("click", () => {
+      ctx.strokeStyle = "#ff0000";
+      currentColorText.textContent = "Red";
+    });
+
+    document.getElementById("blueBtn").addEventListener("click", () => {
+      ctx.strokeStyle = "#0000ff";
+      currentColorText.textContent = "Blue";
+    });
+
+    document.getElementById("eraserBtn").addEventListener("click", () => {
+      ctx.strokeStyle = "#ffffff";
+      currentColorText.textContent = "Eraser";
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#000000"; // reset back to black after clear
+      currentColorText.textContent = "Black";
+    });
+  </script>
 </body>
 </html>
