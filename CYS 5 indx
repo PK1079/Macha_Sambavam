@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <title>Kids Sketch Pad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     #sketchPad {
       border: 2px solid #000;
-      background-color: #ffffff; /* ensure canvas starts white */
+      background-color: #ffffff; /* canvas starts white */
     }
     #currentColorDisplay {
       margin-top: 10px;
@@ -24,99 +23,98 @@
     <!-- Canvas -->
     <canvas id="sketchPad" width="500" height="300"></canvas>
 
-    <!-- Color Control Buttons -->
+    <!-- Buttons -->
     <div class="my-3">
       <button id="redBtn" class="btn btn-danger">Red</button>
       <button id="blueBtn" class="btn btn-primary">Blue</button>
       <button id="eraserBtn" class="btn btn-secondary">Eraser</button>
     </div>
 
-    <!-- Clear Button -->
     <div class="mb-3">
       <button id="clearBtn" class="btn btn-dark">Clear Canvas</button>
     </div>
 
-    <!-- Current Color Display -->
     <div id="currentColorDisplay">Current Color: <span id="currentColor">Black</span></div>
   </div>
 
   <script>
-  const canvas = document.getElementById("sketchPad");
-  const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("sketchPad");
+    const ctx = canvas.getContext("2d");
 
-  // Fill canvas with white background initially
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Default stroke = black
-  ctx.strokeStyle = "#000000";
-  ctx.lineWidth = 5;   // make line thick enough to hit (50,50)
-  ctx.lineCap = "round";
-
-  let drawing = false;
-
-  function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-  }
-
-  function startDraw(e) {
-    const { x, y } = getPos(e);
-    if (x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height) {
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x, y); // put an initial dot
-      ctx.stroke();
-    }
-  }
-
-  function draw(e) {
-    if (!drawing) return;
-    const { x, y } = getPos(e);
-    if (x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height) {
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    }
-  }
-
-  function stopDraw() {
-    drawing = false;
-    ctx.beginPath();
-  }
-
-  // Event listeners
-  canvas.addEventListener("mousedown", startDraw);
-  canvas.addEventListener("mousemove", draw);
-  canvas.addEventListener("mouseup", stopDraw);
-  canvas.addEventListener("mouseleave", stopDraw);
-
-  // Color buttons
-  const currentColorText = document.getElementById("currentColor");
-
-  document.getElementById("redBtn").addEventListener("click", () => {
-    ctx.strokeStyle = "#ff0000";
-    currentColorText.textContent = "Red";
-  });
-
-  document.getElementById("blueBtn").addEventListener("click", () => {
-    ctx.strokeStyle = "#0000ff";
-    currentColorText.textContent = "Blue";
-  });
-
-  document.getElementById("eraserBtn").addEventListener("click", () => {
-    ctx.strokeStyle = "#ffffff";
-    currentColorText.textContent = "Eraser";
-  });
-
-  document.getElementById("clearBtn").addEventListener("click", () => {
+    // White background
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "#000000"; // reset back to black after clear
-    ctx.lineWidth = 5;
-    currentColorText.textContent = "Black";
-  });
-</script>
 
+    // Default stroke black
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 8;   // make line thick enough
+    ctx.lineCap = "round";
+
+    let drawing = false;
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    function startDraw(e) {
+      const { x, y } = getPos(e);
+      if (x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height) {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y);   // draw a dot immediately
+        ctx.stroke();
+      }
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      const { x, y } = getPos(e);
+      if (x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height) {
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+    }
+
+    function stopDraw() {
+      if (drawing) {
+        drawing = false;
+        ctx.beginPath();
+      }
+    }
+
+    // Canvas events
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stopDraw);
+    canvas.addEventListener("mouseleave", stopDraw);
+
+    // Buttons
+    const currentColorText = document.getElementById("currentColor");
+
+    document.getElementById("redBtn").addEventListener("click", () => {
+      ctx.strokeStyle = "#ff0000";
+      currentColorText.textContent = "Red";
+    });
+
+    document.getElementById("blueBtn").addEventListener("click", () => {
+      ctx.strokeStyle = "#0000ff";
+      currentColorText.textContent = "Blue";
+    });
+
+    document.getElementById("eraserBtn").addEventListener("click", () => {
+      ctx.strokeStyle = "#ffffff";
+      currentColorText.textContent = "Eraser";
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#000000"; // reset to black
+      ctx.lineWidth = 8;
+      currentColorText.textContent = "Black";
+    });
+  </script>
 </body>
 </html>
